@@ -9,21 +9,21 @@ import {
 import { connect } from 'react-redux';
 import { createStackNavigator } from 'react-navigation';
 
-class Accounts extends Component {
+class Payments extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>Accounts</Text>
+        <Text style={styles.text}>Payments</Text>
       </View>
     )
   }
 }
 
-const AccountsNavigator = createStackNavigator({
-  Accounts: {
-    screen: Accounts,
+const PaymentsNavigator = createStackNavigator({
+  Payments: {
+    screen: Payments,
     navigationOptions: ({ navigation, screenProps }) => ({
-      title: 'Accounts',
+      title: 'Payments',
       headerStyle: {
         height: 56,
         backgroundColor: '#77439E'
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
 })
 
 
-const AccountsScene = (props) => <AccountsNavigator screenProps={props} />
+const PaymentsScene = (props) => <PaymentsNavigator screenProps={props} />
 
 const mapStateToProps = state => {
   return {
@@ -93,4 +93,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AccountsScene);
+export default connect(mapStateToProps, mapDispatchToProps)(PaymentsScene);

@@ -7,77 +7,115 @@ import {
   View,
   TouchableOpacity,
   Image,
-  Clipboard
+  ScrollView
 } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
-var ImagePicker = require('react-native-image-picker');
+var Carousel = require('react-native-carousel');
 
-type Props = {};
 class Dashboard extends Component<Props> {
   state = {
-    avatarSource: {}
+    transactions: [
+      {
+        title: 'ATM Lagos',
+        amount: '- N 450.00',
+        status: 'OUT',
+        date: 'Today',
+        type: 'Bank Withdraw'
+      },
+      {
+        title: 'ATM Lagos',
+        amount: '+ N 450.00',
+        status: 'IN',
+        date: 'Yesterday',
+        type: 'Bank Withdraw'
+      },
+      {
+        title: '003 645 6548 65',
+        amount: '- 100 SP',
+        status: 'OUT',
+        date: '01/06/2015',
+        type: 'Airtime recharge'
+      },
+      {
+        title: 'John Doe',
+        amount: '+ N 450.00',
+        status: 'IN',
+        date: '31/05/2015',
+        type: 'Transfer'
+      },
+      {
+        title: '003 645 6548 65',
+        amount: '- 100 SP',
+        status: 'OUT',
+        date: '11/05/2015',
+        type: 'Airtime recharge'
+      },
+      {
+        title: 'ATM Lagos',
+        amount: '- N 450.00',
+        status: 'OUT',
+        date: '09/05/2015',
+        type: 'Bank Withdraw'
+      },
+
+    ]
   }
-  uploadPhoto() {
-    // More info on all the options is below in the README...just some common use cases shown here
-    var options = {
-      title: 'Select Avatar',
-      customButtons: [
-        {name: 'fb', title: 'Choose Photo from Facebook'},
-      ],
-      storageOptions: {
-        skipBackup: true,
-        path: 'images'
-      }
-    };
 
-    /**
-    * The first arg is the options object for customization (it can also be null or omitted for default options),
-    * The second arg is the callback which sends object: response (more info below in README)
-    */
-    ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
-
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      }
-      else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      }
-      else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      }
-      else {
-        let source = { uri: response.uri };
-
-        // You can also display the image using data:
-        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-        this.setState({
-          avatarSource: source
-        });
-        console.log(source)
-      }
-    });
-
+  renderTransaction(trans, i) {
+    const isIn = trans.status === 'IN'
+    return (
+      <View key={i} style={[styles.trans, {backgroundColor: i%2? '#F1F1F1' : '#FFFFFF'}]}>
+        <View style={styles.row}>
+          <Text style={[styles.text, styles.transTitle]}>{trans.title}</Text>
+          <Text style={[styles.text, styles.transAmount, { color: isIn? '#16967A' : '#E44235' }]}>{trans.amount}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={[styles.text, styles.transDate]}>{trans.date}</Text>
+          <Text style={[styles.text, styles.transType]}>{trans.type}</Text>
+        </View>
+      </View>
+    )
   }
+
   render() {
-    const { avatarSource } = this.state
+    const { transactions } = this.state
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={()=>this.uploadPhoto()}>
-          <Text style={styles.uploadText}>Upload Photo</Text>
-        </TouchableOpacity>
-        <View style={styles.row}>
-          <Text style={styles.text}>Text to copy to your clipboard</Text>
-          <TouchableOpacity style={styles.copyButton} onPress={()=>Clipboard.setString('Text to copy to your clipboard')}>
-            <Text style={styles.clipboardText}>Copy</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={()=>this.props.screenProps.navigation.toggleDrawer()}>
-            <Text>Open Drawer</Text>
-          </TouchableOpacity>
+        <Carousel
+        hideIndicators={false} // Set to true to hide the indicators
+        indicatorColor="rgba(255,255,255,1.0)" // Active indicator color
+        indicatorSize={50} // Indicator bullet size
+        indicatorSpace={15} // space between each indicator
+        inactiveIndicatorColor="rgba(255,255,255,0.5)" // Inactive indicator color
+        indicatorAtBottom={true} // Set to false to show the indicators at the top
+        indicatorOffset={0} // Indicator relative position from top or bottom
+        onPageChange={()=>{}} // Called when the active page changes
+        inactiveIndicatorText= '•' // Inactive indicator content ( You can customize to use any Unicode character )
+        indicatorText= '•' // Active indicator content ( You can customize to use any Unicode character )
+        animate={false} // Enable carousel autoplay
+        delay={5000} // Set Animation delay between slides
+        loop={false} // Allow infinite looped animation. Depends on Prop {...animate} set to true.
+        >
+          <View style={styles.heading}>
+            <Text style={[styles.text, styles.balanceLabel]}>Balance</Text>
+            <Text style={[styles.text, styles.balanceAmount]}>N 979153.36</Text>
+            <Text style={[styles.text, styles.spAmount]}>16.500 SP</Text>
+          </View>
+          <View style={styles.heading}>
+            <Text style={[styles.text, styles.balanceLabel]}>Points</Text>
+            <Text style={[styles.text, styles.balanceAmount]}>M 2330.41</Text>
+            <Text style={[styles.text, styles.spAmount]}>12.400 PT</Text>
+          </View>
+        </Carousel>
+        <View style={styles.headline}>
+          <Text style={[styles.text, styles.headlineText]}>Latest Transactions</Text>
         </View>
-        <Image source={avatarSource} style={styles.avatar} />
+        <View style={styles.list}>
+          <ScrollView>
+            {transactions.map(this.renderTransaction.bind(this))}
+          </ScrollView>
+        </View>
       </View>
     );
   }
@@ -91,9 +129,14 @@ const DashboardNavigator = createStackNavigator({
     navigationOptions: ({ navigation, screenProps }) => ({
       title: 'Dashboard',
       headerStyle: {
-        // backgroundColor: 'red'
+        height: 56,
+        backgroundColor: '#77439E'
       },
       headerTitleStyle: {
+        fontSize: 20,
+        fontFamily: 'ProximaNovaSoft',
+        fontWeight: 'normal',
+        color: '#FFFFFF',
         // backgroundColor: 'blue'
       },
       headerTitleContainerStyle: {
@@ -120,39 +163,78 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-  uploadText: {
-    margin: 15
-  },
-  avatar: {
-    marginTop: 15,
-    width: 80,
-    height: 80
+  heading: {
+    flex: 1,
+    backgroundColor: '#B872EF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 20
   },
   text: {
+    color: '#FFFFFF',
     fontFamily: 'ProximaNovaSoft'
   },
-  textInput: {
-    width: 150,
-    height: 40
+  balanceLabel: {
+    fontSize: 18,
+    lineHeight: 40
+  },
+  balanceAmount: {
+    fontSize: 32,
+    fontWeight: '600',
+    lineHeight: 60
+  },
+  spAmount: {
+    fontSize: 24,
+    fontWeight: '600'
+  },
+  headline: {
+    height: 42,
+    backgroundColor: '#77439E',
+    justifyContent: 'center',
+    paddingHorizontal: 15
+  },
+  headlineText: {
+    fontSize: 14,
+    fontWeight: '500'
+  },
+  list: {
+    flex: 1.5
+  },
+  trans: {
+    height: 65,
+    paddingHorizontal: 15,
+    justifyContent: 'center'
   },
   row: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
-  copyButton: {
-    marginLeft: 15,
-    borderWidth: .5,
-    paddingHorizontal: 5,
-    paddingVertical: 2,
-    borderRadius: 5,
-    borderColor: '#bababa',
-    backgroundColor: '#bababa'
+  transTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#959595',
+    lineHeight: 25
   },
-  clipboardText: {
-    color: '#fafafa'
+  transAmount: {
+    fontSize: 16,
+    fontWeight: '600',
+    lineHeight: 25
+  },
+  transDate: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#959595'
+  },
+  transType: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#959595'
   },
   menuIcon: {
     width: 30,
-    height: 30
+    height: 30,
+    tintColor: '#FFFFFF'
   },
   navButton: {
     width: 40,

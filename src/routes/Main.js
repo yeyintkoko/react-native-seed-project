@@ -10,6 +10,11 @@ import {
 import { createDrawerNavigator, DrawerItems } from 'react-navigation';
 import Dashboard from '../screens/Dashboard';
 import Accounts from '../screens/Accounts';
+import Cards from '../screens/Cards';
+import Payments from '../screens/Payments';
+import Transfers from '../screens/Transfers';
+import Airtime from '../screens/Airtime';
+import Settings from '../screens/Settings';
 
 export default Drawer = createDrawerNavigator({
   Dashboard: {
@@ -18,9 +23,7 @@ export default Drawer = createDrawerNavigator({
       title: 'Dashboard',
       drawerLabel: ({ tintColor })=>{
         return (
-          <View style={styles.drawerLabel}>
-            <Text style={[styles.label, {color: tintColor}]}>Dashboard</Text>
-          </View>
+          <Text style={[styles.label, {color: tintColor}]}>Dashboard</Text>
         )
       },
       drawerIcon: ({ tintColor }) => (
@@ -37,14 +40,97 @@ export default Drawer = createDrawerNavigator({
       title: 'Accounts',
       drawerLabel: ({ tintColor })=>{
         return (
-          <View style={styles.drawerLabel}>
-            <Text style={[styles.label, {color: tintColor}]}>Accounts</Text>
-          </View>
+          <Text style={[styles.label, {color: tintColor}]}>Accounts</Text>
         )
       },
       drawerIcon: ({ tintColor }) => (
         <Image
           source={require('../images/side-menu/ic-accounts.png')}
+          style={[styles.icon, {tintColor: tintColor}]}
+        />
+      ),
+    }),
+  },
+  Cards: {
+    screen: Cards,
+    navigationOptions: ({navigation, screenProps}) => ({
+      title: 'Cards',
+      drawerLabel: ({ tintColor })=>{
+        return (
+          <Text style={[styles.label, {color: tintColor}]}>Cards</Text>
+        )
+      },
+      drawerIcon: ({ tintColor }) => (
+        <Image
+          source={require('../images/side-menu/ic-cards.png')}
+          style={[styles.icon, {tintColor: tintColor}]}
+        />
+      ),
+    }),
+  },
+  Payments: {
+    screen: Payments,
+    navigationOptions: ({navigation, screenProps}) => ({
+      title: 'Payments',
+      drawerLabel: ({ tintColor })=>{
+        return (
+          <Text style={[styles.label, {color: tintColor}]}>Payments</Text>
+        )
+      },
+      drawerIcon: ({ tintColor }) => (
+        <Image
+          source={require('../images/side-menu/ic-payments.png')}
+          style={[styles.icon, {tintColor: tintColor}]}
+        />
+      ),
+    }),
+  },
+  Transfers: {
+    screen: Transfers,
+    navigationOptions: ({navigation, screenProps}) => ({
+      title: 'Accounts',
+      drawerLabel: ({ tintColor })=>{
+        return (
+          <Text style={[styles.label, {color: tintColor}]}>Transfers</Text>
+        )
+      },
+      drawerIcon: ({ tintColor }) => (
+        <Image
+          source={require('../images/side-menu/ic-transfers.png')}
+          style={[styles.icon, {tintColor: tintColor}]}
+        />
+      ),
+    }),
+  },
+  Airtime: {
+    screen: Airtime,
+    navigationOptions: ({navigation, screenProps}) => ({
+      title: 'Airtime',
+      drawerLabel: ({ tintColor })=>{
+        return (
+          <Text style={[styles.label, {color: tintColor}]}>Airtime</Text>
+        )
+      },
+      drawerIcon: ({ tintColor }) => (
+        <Image
+          source={require('../images/side-menu/ic-airtime.png')}
+          style={[styles.icon, {tintColor: tintColor}]}
+        />
+      ),
+    }),
+  },
+  Settings: {
+    screen: Settings,
+    navigationOptions: ({navigation, screenProps}) => ({
+      title: 'Settings',
+      drawerLabel: ({ tintColor })=>{
+        return (
+          <Text style={[styles.label, {color: tintColor}]}>Settings</Text>
+        )
+      },
+      drawerIcon: ({ tintColor }) => (
+        <Image
+          source={require('../images/side-menu/ic-settings.png')}
           style={[styles.icon, {tintColor: tintColor}]}
         />
       ),
@@ -60,7 +146,7 @@ export default Drawer = createDrawerNavigator({
           <ImageBackground source={require('../images/side-menu/menu-header-bg.png')} style={styles.bgImage}>
             <View style={styles.row}>
               <Image source={require('../images/side-menu/profile_photo.jpg')} style={styles.avatar} />
-              <Text style={styles.name}>Steve Morgan</Text>
+              <Text style={styles.name}>John Doe</Text>
             </View>
           </ImageBackground>
         </View>
@@ -70,6 +156,12 @@ export default Drawer = createDrawerNavigator({
             activeBackgroundColor ='#F7F0FC'
             inactiveBackgroundColor = '#FFFFFF'
             inactiveTintColor='#8D52BA'
+            itemsContainerStyle={{
+              paddingVertical: 0
+            }}
+            itemStyle={{
+              height: 55
+            }}
             {...props}
           />
         </ScrollView>
@@ -96,8 +188,8 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
-    marginHorizontal: 15
+    marginBottom: 25,
+    marginHorizontal: 20
   },
   avatar: {
     width: 50,
@@ -110,14 +202,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'ProximaNovaSoft'
   },
-  drawerLabel: {
-    flex: 1,
-    justifyContent: 'center'
-  },
   icon: {
     width: 30,
-    height: 30,
-    tintColor: '#7C7E8B'
+    height: 30
   },
   label: {
     fontFamily: 'ProximaNovaSoft',
