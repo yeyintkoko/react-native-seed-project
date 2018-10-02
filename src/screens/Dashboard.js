@@ -9,11 +9,12 @@ import {
   Image,
   Clipboard
 } from 'react-native';
+import { createStackNavigator } from 'react-navigation';
+import { connect } from 'react-redux';
 var ImagePicker = require('react-native-image-picker');
 
-
 type Props = {};
-export default class Dashboard extends Component<Props> {
+class Dashboard extends Component<Props> {
   state = {
     avatarSource: {}
   }
@@ -72,7 +73,7 @@ export default class Dashboard extends Component<Props> {
           <TouchableOpacity style={styles.copyButton} onPress={()=>Clipboard.setString('Text to copy to your clipboard')}>
             <Text style={styles.clipboardText}>Copy</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>this.props.navigation.toggleDrawer()}>
+          <TouchableOpacity onPress={()=>this.props.screenProps.navigation.toggleDrawer()}>
             <Text>Open Drawer</Text>
           </TouchableOpacity>
         </View>
@@ -82,10 +83,42 @@ export default class Dashboard extends Component<Props> {
   }
 }
 
+
+
+const DashboardNavigator = createStackNavigator({
+  Dashboard: {
+    screen: Dashboard,
+    navigationOptions: ({ navigation, screenProps }) => ({
+      title: 'Dashboard',
+      headerStyle: {
+        // backgroundColor: 'red'
+      },
+      headerTitleStyle: {
+        // backgroundColor: 'blue'
+      },
+      headerTitleContainerStyle: {
+        justifyContent: 'center',
+        // backgroundColor: 'yellow'
+      },
+      headerLeft: (
+        <TouchableOpacity style={styles.navButton} onPress={()=> {
+          screenProps.navigation.toggleDrawer()
+        }}>
+          <Image source={require('../images/nav-icons/menu_black_18dp.png')} style={styles.menuIcon} />
+        </TouchableOpacity>
+      ),
+      headerRight: (
+        <View style={styles.navButton} />
+      )
+    }),
+  },
+});
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#FFFFFF',
   },
   uploadText: {
     margin: 15
@@ -116,5 +149,33 @@ const styles = StyleSheet.create({
   },
   clipboardText: {
     color: '#fafafa'
+  },
+  menuIcon: {
+    width: 30,
+    height: 30
+  },
+  navButton: {
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 10
   }
 });
+
+
+
+const DashboardScene = (props) => <DashboardNavigator screenProps={props} />
+
+const mapStateToProps = state => {
+  return {
+    credentials: state.credentials
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardScene);

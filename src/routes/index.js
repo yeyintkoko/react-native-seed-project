@@ -5,7 +5,7 @@ export default createStackNavigator({
   Main: {
     screen: Main,
     navigationOptions: ()=> ({
-      
+      gesturesEnabled: false,
       header: null
     })
   },
